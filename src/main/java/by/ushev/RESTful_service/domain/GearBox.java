@@ -10,12 +10,9 @@ import java.util.Set;
 @Entity
 @Data
 public class GearBox {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
-    @Column(nullable = false)
-    private String name;
+    @Id
+    private String type;
 
 /*    @OneToMany(mappedBy = "gearBox")
     private Set<CarOffer> carOffers;*/

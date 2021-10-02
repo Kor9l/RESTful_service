@@ -10,14 +10,7 @@ import java.util.Set;
 @Entity
 @Data
 public class Model {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(nullable = false)
     private String name;
-
-/*    @OneToMany(mappedBy = "model")
-    private Set<CarOffer> carOffers;*/
-
 }

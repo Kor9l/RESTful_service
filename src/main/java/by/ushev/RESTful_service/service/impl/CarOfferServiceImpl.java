@@ -45,7 +45,7 @@ public class CarOfferServiceImpl implements CarOfferService {
     @Override
     public void create(UserPrincipal userPrincipal, CreateCarOfferRequest createCarOfferRequest) {
         CarOffer carOffer = carOfferDtoToEntityMapper.carOfferDtoToEntity(createCarOfferRequest);
-        carOffer.setSellerId(userPrincipal.getId());
+        carOffer.setSellerFullName(userPrincipal.getUsername());
         carOffer.setDelete(false);
 
     }
@@ -53,7 +53,7 @@ public class CarOfferServiceImpl implements CarOfferService {
     @Override
     public Page<CarOfferResponse> search(SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
         List<CarOfferResponse> result = new ArrayList<>();
-        if (searchCarOfferRequest.getBrandId()== null && searchCarOfferRequest.getCityId()== null){
+        if (searchCarOfferRequest.getBrandName()== null && searchCarOfferRequest.getCityName()== null){
             result = carOfferRepository.findAllByDelete(false,pageable).stream()
                     .map(carOfferDtoToEntityMapper::carEntityToDto).collect(Collectors.toList());
         }
@@ -64,16 +64,16 @@ public class CarOfferServiceImpl implements CarOfferService {
     public CarOfferResponse update(UserPrincipal userPrincipal, UpdateCarOfferRequest updateCarOfferRequest) {
         CarOffer carOffer = carOfferRepository.findById(updateCarOfferRequest.getId())
                 .orElseThrow(()-> new EntityNotFoundException("Car offer with id:"+updateCarOfferRequest.getId()+" not found."));
-        carOffer.setBrandId(updateCarOfferRequest.getBrandId());
-        carOffer.setCityId(updateCarOfferRequest.getCityId());
+        carOffer.setBrandName(updateCarOfferRequest.getBrandName());
+        carOffer.setCityName(updateCarOfferRequest.getCityName());
         carOffer.setDescription(updateCarOfferRequest.getDescription());
-        carOffer.setSellerId(userPrincipal.getId());
-        carOffer.setFuelId(updateCarOfferRequest.getFuelId());
-        carOffer.setGearBoxId(updateCarOfferRequest.getGearBoxId());
+        carOffer.setSellerFullName(userPrincipal.getUsername());
+        carOffer.setFuelType(updateCarOfferRequest.getFuelType());
+        carOffer.setGearBoxType(updateCarOfferRequest.getGearBoxType());
         carOffer.setYear(updateCarOfferRequest.getYear());
         carOffer.setMileage(updateCarOfferRequest.getMileage());
         carOffer.setPrice(updateCarOfferRequest.getPrice());
-        carOffer.setModelId(updateCarOfferRequest.getModelId());
+        carOffer.setModelName(updateCarOfferRequest.getModelName());
         carOfferRepository.save(carOffer);
         return carOfferDtoToEntityMapper.carEntityToDto(carOffer);
     }

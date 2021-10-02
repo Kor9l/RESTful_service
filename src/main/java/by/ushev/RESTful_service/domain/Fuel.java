@@ -10,13 +10,8 @@ import java.util.Set;
 @Entity
 @Data
 public class Fuel {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String type;
 
-    @Column(nullable = false)
-    private String name;
-
-/*    @OneToMany(mappedBy = "fuel")
-    private Set<CarOffer> carOffers;*/
 }

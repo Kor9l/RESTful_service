@@ -14,18 +14,17 @@ public class CarOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer sellerId;
+    private String sellerFullName;
 
-    @Column(name = "brand_id")
-    private Integer brandId;
+    private String brandName;
 
-    private Integer modelId;
+    private String modelName;
 
-    private Integer gearBoxId;
+    private String gearBoxType;
 
-    private Integer fuelId;
+    private String fuelType;
 
-    private Integer cityId;
+    private String cityName;
 
     private String description;
 
@@ -36,29 +35,29 @@ public class CarOffer {
     private Float price;
 
     private Boolean delete;
-
-/*    @ManyToOne
+/*
+   @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false, updatable = false, insertable = false)
-    private Users users;*/
+    private Users users;
 
     @JoinColumn(updatable = false, insertable = false)
     @ManyToOne
     private Brand brand;
-/*
+
     @ManyToOne
-    @JoinColumn(name = "model_id", nullable = false, updatable = false, insertable = false)
+    @JoinColumn( nullable = false, updatable = false, insertable = false)
     private Model model;
 
     @ManyToOne
-    @JoinColumn(name = "fuel_id", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(nullable = false, updatable = false, insertable = false)
     private Fuel fuel;
 
     @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(nullable = false, updatable = false, insertable = false)
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "gear_box_id", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(nullable = false, updatable = false, insertable = false)
     private GearBox gearBox;*/
 
 }

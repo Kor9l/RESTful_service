@@ -10,12 +10,8 @@ import java.util.Set;
 @Entity
 @Data
 public class City {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(nullable = false)
     private String name;
-
 
 }

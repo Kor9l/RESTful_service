@@ -4,16 +4,26 @@ import lombok.Data;
 
 @Data
 public class CreateCarOfferRequest {
-    private Integer sellerId;
-    private Integer brandId;
-    private Integer modelId;
-    private Integer gearBoxId;
-    private Integer fuelId;
-    private Integer cityId;
+    private String sellerFullName;
+
+    private String brandName;
+
+    private String modelName;
+
+    private String gearBoxType;
+
+    private String fuelType;
+
+    private String cityName;
+
     private String description;
+
     private Integer year;
+
     private Integer mileage;
+
     private Float price;
+
 
 
 
