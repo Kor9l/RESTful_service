@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class SearchCarOfferRequest {
-    private Integer id;
-    private Integer sellerId;
+    private Integer brandId;
+    private Integer cityId;
 }

@@ -1,6 +1,6 @@
 package by.ushev.RESTful_service.security;
 
-import by.ushev.RESTful_service.domain.User;
+import by.ushev.RESTful_service.domain.Users;
 import by.ushev.RESTful_service.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +20,7 @@ public class UserPrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
+        Optional<Users> user = userRepository.findByEmail(username);
 
         if (user.isEmpty()) {
             throw new UsernameNotFoundException(username + " was not found");

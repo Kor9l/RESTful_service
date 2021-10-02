@@ -14,10 +14,10 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Builder
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(nullable = false)
     private String email;
 
@@ -32,6 +32,6 @@ public class User {
     @Builder.Default
     private Role role = Role.ROLE_USER;
 
-    @OneToMany(mappedBy = "sellerId")
-    private Set<CarOffer> CarOffers;
+/*    @OneToMany(mappedBy = "users")
+    private Set<CarOffer> CarOffers;*/
 }

@@ -14,61 +14,51 @@ public class CarOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private Integer sellerId;
 
-    @Column(nullable = false)
+    @Column(name = "brand_id")
     private Integer brandId;
 
-    @Column(nullable = false)
     private Integer modelId;
 
-    @Column(nullable = false)
     private Integer gearBoxId;
 
-    @Column(nullable = false)
     private Integer fuelId;
 
-    @Column(nullable = false)
     private Integer cityId;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private Integer year;
 
-    @Column(nullable = false)
     private Integer mileage;
 
-    @Column(nullable = false)
     private Float price;
 
-    @Column(nullable = false)
     private Boolean delete;
 
-    @ManyToOne
-    @JoinColumn(name = "sellerId", nullable = false, updatable = false, insertable = false)
-    private User user;
+/*    @ManyToOne
+    @JoinColumn(name = "seller_id", nullable = false, updatable = false, insertable = false)
+    private Users users;*/
 
+    @JoinColumn(updatable = false, insertable = false)
     @ManyToOne
-    @JoinColumn(name = "brandId", nullable = false, updatable = false, insertable = false)
     private Brand brand;
-
+/*
     @ManyToOne
-    @JoinColumn(name = "modelId", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "model_id", nullable = false, updatable = false, insertable = false)
     private Model model;
 
     @ManyToOne
-    @JoinColumn(name = "fuelId", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "fuel_id", nullable = false, updatable = false, insertable = false)
     private Fuel fuel;
 
     @ManyToOne
-    @JoinColumn(name = "cityId", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "city_id", nullable = false, updatable = false, insertable = false)
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "gearBoxID", nullable = false, updatable = false, insertable = false)
-    private GearBox gearBox;
+    @JoinColumn(name = "gear_box_id", nullable = false, updatable = false, insertable = false)
+    private GearBox gearBox;*/
 
 }

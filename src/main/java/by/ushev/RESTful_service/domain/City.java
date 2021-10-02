@@ -17,6 +17,5 @@ public class City {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "cityId")
-    private Set<CarOffer> carOffers;
+
 }

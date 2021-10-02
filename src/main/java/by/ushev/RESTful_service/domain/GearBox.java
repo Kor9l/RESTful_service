@@ -17,6 +17,6 @@ public class GearBox {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "gearBoxId")
-    private Set<CarOffer> carOffers;
+/*    @OneToMany(mappedBy = "gearBox")
+    private Set<CarOffer> carOffers;*/
 }

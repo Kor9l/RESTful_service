@@ -17,7 +17,7 @@ public class Model {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "modelId")
-    private Set<CarOffer> carOffers;
+/*    @OneToMany(mappedBy = "model")
+    private Set<CarOffer> carOffers;*/
 
 }

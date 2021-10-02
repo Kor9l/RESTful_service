@@ -1,6 +1,6 @@
 package by.ushev.RESTful_service.security;
 
-import by.ushev.RESTful_service.domain.User;
+import by.ushev.RESTful_service.domain.Users;
 import by.ushev.RESTful_service.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,17 +10,17 @@ import java.util.Collection;
 
 public class UserPrincipal implements UserDetails {
 
-    private final User user;
+    private final Users user;
     Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(
-            Long id,
+            Integer id,
             String email,
             String password,
             Role role,
             Collection<? extends GrantedAuthority> authorities
     ) {
-        this.user = User.builder()
+        this.user = Users.builder()
                 .id(id)
                 .email(email)
                 .password(password)
@@ -65,7 +65,7 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return user.getId();
     }
 }

@@ -1,15 +1,21 @@
 package by.ushev.RESTful_service.domain;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @NoArgsConstructor
+@EqualsAndHashCode(of = "name")
+@ToString(of = {"name"})
 @Entity
-@Data
+@Getter
+@Table(name = "brand")
 public class Brand {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,6 +23,8 @@ public class Brand {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "brandId")
-    private Set<CarOffer> carOffers;
+
+    public Brand(String name) {
+        this.name = name;
+    }
 }

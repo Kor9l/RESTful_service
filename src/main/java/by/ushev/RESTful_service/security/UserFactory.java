@@ -1,6 +1,6 @@
 package by.ushev.RESTful_service.security;
 
-import by.ushev.RESTful_service.domain.User;
+import by.ushev.RESTful_service.domain.Users;
 import by.ushev.RESTful_service.enums.Role;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +15,7 @@ import java.util.List;
 public final class UserFactory {
 
 
-    public static UserDetails create(User user) {
+    public static UserDetails create(Users user) {
         return new UserPrincipal(
                 user.getId(),
                 user.getEmail(),
