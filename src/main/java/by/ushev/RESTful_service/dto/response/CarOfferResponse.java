@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CarOfferResponse {
+
+    private Integer id;
+
     private String sellerFullName;
 
     private String brandName;

@@ -15,14 +15,18 @@ import java.util.List;
 @RequestMapping("/carOffer")
 public class CarOfferController {
 
+    @GetMapping("/viewCarOffer/{id}")
+    public ModelAndView carOfferView(Model model) {
+        return new ModelAndView("carOfferView");
+    }
 
     @GetMapping({"/", "/index"})
     public ModelAndView index(Model model) {
         return new ModelAndView("index");
     }
 
-    @GetMapping("/all")
-    public ModelAndView getAllBooksPage(Model model) {
-        return new ModelAndView("carOfferList");
+    @GetMapping("/createCarOffer")
+    public ModelAndView createCarOffer(Model model) {
+        return new ModelAndView("createCarOffer");
     }
 }

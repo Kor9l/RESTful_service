@@ -15,6 +15,7 @@ public class UserPrincipal implements UserDetails {
 
     public UserPrincipal(
             Integer id,
+            String fullName,
             String email,
             String password,
             Role role,
@@ -22,6 +23,7 @@ public class UserPrincipal implements UserDetails {
     ) {
         this.user = Users.builder()
                 .id(id)
+                .fullName(fullName)
                 .email(email)
                 .password(password)
                 .role(role)
@@ -40,6 +42,7 @@ public class UserPrincipal implements UserDetails {
         return this.user.getPassword();
     }
 
+    public Role getRole() {return this.user.getRole();}
     @Override
     public String getUsername() {
         return this.user.getFullName();

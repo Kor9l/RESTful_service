@@ -5,6 +5,7 @@ import by.ushev.RESTful_service.dto.request.CreateCarOfferRequest;
 import by.ushev.RESTful_service.dto.request.SearchCarOfferRequest;
 import by.ushev.RESTful_service.dto.request.UpdateCarOfferRequest;
 import by.ushev.RESTful_service.dto.response.CarOfferResponse;
+import by.ushev.RESTful_service.enums.Role;
 import by.ushev.RESTful_service.mapper.CarOfferDtoToEntityMapper;
 import by.ushev.RESTful_service.repository.CarOfferRepository;
 import by.ushev.RESTful_service.security.UserPrincipal;
@@ -23,8 +24,8 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CarOfferServiceImpl implements CarOfferService {
-        private final CarOfferRepository carOfferRepository;
-        private final CarOfferDtoToEntityMapper carOfferDtoToEntityMapper;
+    private final CarOfferRepository carOfferRepository;
+    private final CarOfferDtoToEntityMapper carOfferDtoToEntityMapper;
 
 
     @Override
@@ -36,7 +37,7 @@ public class CarOfferServiceImpl implements CarOfferService {
     @Override
     public void deleteById(Integer id) {
         CarOffer carOffer = carOfferRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Car offer with id:" + id+" not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Car offer with id:" + id + " not found."));
         carOffer.setDelete(true);
         carOfferRepository.save(carOffer);
 
@@ -47,23 +48,33 @@ public class CarOfferServiceImpl implements CarOfferService {
         CarOffer carOffer = carOfferDtoToEntityMapper.carOfferDtoToEntity(createCarOfferRequest);
         carOffer.setSellerFullName(userPrincipal.getUsername());
         carOffer.setDelete(false);
+        carOfferRepository.save(carOffer);
 
     }
 
     @Override
-    public Page<CarOfferResponse> search(SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
+    public Page<CarOfferResponse> search(UserPrincipal user, SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
         List<CarOfferResponse> result = new ArrayList<>();
-        if (searchCarOfferRequest.getBrandName()== null && searchCarOfferRequest.getCityName()== null){
-            result = carOfferRepository.findAllByDelete(false,pageable).stream()
+        if (user.getRole().equals(Role.ROLE_ADMIN)){
+        if (searchCarOfferRequest.getBrandName() == null && searchCarOfferRequest.getCityName() == null) {
+            result = carOfferRepository.findAll(pageable).stream()
                     .map(carOfferDtoToEntityMapper::carEntityToDto).collect(Collectors.toList());
         }
+        }
+        else {
+                if (searchCarOfferRequest.getBrandName() == null && searchCarOfferRequest.getCityName() == null) {
+                    result = carOfferRepository.findByDeleteFalse(pageable).stream()
+                            .map(carOfferDtoToEntityMapper::carEntityToDto).collect(Collectors.toList());
+                }
+        }
         return new PageImpl<>(result);
+
     }
 
     @Override
     public CarOfferResponse update(UserPrincipal userPrincipal, UpdateCarOfferRequest updateCarOfferRequest) {
         CarOffer carOffer = carOfferRepository.findById(updateCarOfferRequest.getId())
-                .orElseThrow(()-> new EntityNotFoundException("Car offer with id:"+updateCarOfferRequest.getId()+" not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Car offer with id:" + updateCarOfferRequest.getId() + " not found."));
         carOffer.setBrandName(updateCarOfferRequest.getBrandName());
         carOffer.setCityName(updateCarOfferRequest.getCityName());
         carOffer.setDescription(updateCarOfferRequest.getDescription());
