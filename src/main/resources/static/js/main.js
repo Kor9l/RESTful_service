@@ -155,18 +155,25 @@ Vue.component('car-offer-list', {
             viewPageV: false,
             carOffer: null,
             nextPageAvailable: false,
-            last : true
+            last : true,
+            first : true,
+            currenPage : 1,
+            previousPageAvailable: false
         }
     },
     watch: {
         last: function(){
             this.nextPageCheck()
+        },
+        first: function (){
+            this.previousPageCheck()
         }
     },
     template:
         '<div>' +
         '<div >' +
-        '<input  type="button" value="Refresh" @click="refreshPage" />' +
+        '<input v-if="previousPageAvailable"  type="button" value="Previous Page" @click="previousPage" />' +
+        '<span>Curren page number: {{ currenPage }} </span>' +
         '<input v-if="nextPageAvailable" type="button" value="Next Page" @click="nextPage" />'+
         '<div > <car-offer-form v-if="updatePageV" :carOffers="carOffers" :carOfferAttr="carOffer" /></div>' +
         '<car-offer-row v-if="mainPageV"  v-for="carOffer in carOffers" v-bind:key="carOffer.id" :carOffer="carOffer"' +
@@ -185,11 +192,24 @@ Vue.component('car-offer-list', {
                 this.nextPageAvailable = true
             }
         },
+        previousPageCheck:function (){
+          if(this.first){
+              this.previousPageAvailable =false
+          }
+          else {
+              this.previousPageAvailable =true
+          }
+        },
         nextPage:function (){
         this.pageNumb++,
+
             this.refreshPage()
         },
-        refreshPage: function (){
+        previousPage:function (){
+            this.pageNumb--,
+                this.refreshPage()
+        },
+        clearOffers:function (){
             this.carOffers.splice(this.carOffers.indexOf(0), 1);
             this.carOffers.splice(this.carOffers.indexOf(1), 1);
             this.carOffers.splice(this.carOffers.indexOf(2), 1);
@@ -200,10 +220,15 @@ Vue.component('car-offer-list', {
             this.carOffers.splice(this.carOffers.indexOf(7), 1);
             this.carOffers.splice(this.carOffers.indexOf(8), 1);
             this.carOffers.splice(this.carOffers.indexOf(9), 1);
+        },
+        refreshPage: function (){
+            this.clearOffers();
             this.$http.get('/api/carOffer',{params: {page: this.pageNumb}})
                 .then(response => response.json())
                 .then(response => {
                     this.last = response.last
+                    this.first = response.first
+                    this.currenPage = response.number +1
                     response.content.forEach(carOffer => this.carOffers.push(carOffer))
 
                 })
