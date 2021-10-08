@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CarOfferRepository extends JpaRepository<CarOffer, Integer> {
     Page<CarOffer> findByDeleteFalse(Pageable pageable);
+    Page<CarOffer> findAll(Pageable pageable);
+
 }

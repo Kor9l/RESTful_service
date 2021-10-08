@@ -1,13 +1,15 @@
 package by.ushev.RESTful_service.service.impl;
 
+import by.ushev.RESTful_service.domain.Brand;
 import by.ushev.RESTful_service.domain.CarOffer;
+import by.ushev.RESTful_service.domain.GearBox;
 import by.ushev.RESTful_service.dto.request.CreateCarOfferRequest;
 import by.ushev.RESTful_service.dto.request.SearchCarOfferRequest;
 import by.ushev.RESTful_service.dto.request.UpdateCarOfferRequest;
 import by.ushev.RESTful_service.dto.response.CarOfferResponse;
 import by.ushev.RESTful_service.enums.Role;
 import by.ushev.RESTful_service.mapper.CarOfferDtoToEntityMapper;
-import by.ushev.RESTful_service.repository.CarOfferRepository;
+import by.ushev.RESTful_service.repository.*;
 import by.ushev.RESTful_service.security.UserPrincipal;
 import by.ushev.RESTful_service.service.CarOfferService;
 import lombok.AllArgsConstructor;
@@ -26,11 +28,17 @@ import java.util.stream.Collectors;
 public class CarOfferServiceImpl implements CarOfferService {
     private final CarOfferRepository carOfferRepository;
     private final CarOfferDtoToEntityMapper carOfferDtoToEntityMapper;
+    private final BrandRepository brandRepository;
+    private final FuelRepository fuelRepository;
+    private final GearBoxRepository gearBoxRepository;
+    private final ModelRepository modelRepository;
+
 
 
     @Override
     public CarOfferResponse getById(Integer id) {
-        CarOffer carOffer = carOfferRepository.getById(id);
+        CarOffer carOffer = carOfferRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car offer with id:" + id + " not found."));
         return carOfferDtoToEntityMapper.carEntityToDto(carOffer);
     }
 
@@ -48,44 +56,53 @@ public class CarOfferServiceImpl implements CarOfferService {
         CarOffer carOffer = carOfferDtoToEntityMapper.carOfferDtoToEntity(createCarOfferRequest);
         carOffer.setSellerFullName(userPrincipal.getUsername());
         carOffer.setDelete(false);
+        validation(carOffer);
         carOfferRepository.save(carOffer);
 
     }
 
     @Override
-    public Page<CarOfferResponse> search(UserPrincipal user, SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
-        List<CarOfferResponse> result = new ArrayList<>();
+    public Page<CarOffer> search(UserPrincipal user, SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
         if (user.getRole().equals(Role.ROLE_ADMIN)){
-        if (searchCarOfferRequest.getBrandName() == null && searchCarOfferRequest.getCityName() == null) {
-            result = carOfferRepository.findAll(pageable).stream()
-                    .map(carOfferDtoToEntityMapper::carEntityToDto).collect(Collectors.toList());
-        }
+            return carOfferRepository.findAll(pageable);
         }
         else {
-                if (searchCarOfferRequest.getBrandName() == null && searchCarOfferRequest.getCityName() == null) {
-                    result = carOfferRepository.findByDeleteFalse(pageable).stream()
-                            .map(carOfferDtoToEntityMapper::carEntityToDto).collect(Collectors.toList());
-                }
+            return carOfferRepository.findByDeleteFalse(pageable);
         }
-        return new PageImpl<>(result);
+
 
     }
 
     @Override
-    public CarOfferResponse update(UserPrincipal userPrincipal, UpdateCarOfferRequest updateCarOfferRequest) {
-        CarOffer carOffer = carOfferRepository.findById(updateCarOfferRequest.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Car offer with id:" + updateCarOfferRequest.getId() + " not found."));
-        carOffer.setBrandName(updateCarOfferRequest.getBrandName());
-        carOffer.setCityName(updateCarOfferRequest.getCityName());
-        carOffer.setDescription(updateCarOfferRequest.getDescription());
-        carOffer.setSellerFullName(userPrincipal.getUsername());
-        carOffer.setFuelType(updateCarOfferRequest.getFuelType());
-        carOffer.setGearBoxType(updateCarOfferRequest.getGearBoxType());
-        carOffer.setYear(updateCarOfferRequest.getYear());
-        carOffer.setMileage(updateCarOfferRequest.getMileage());
-        carOffer.setPrice(updateCarOfferRequest.getPrice());
-        carOffer.setModelName(updateCarOfferRequest.getModelName());
-        carOfferRepository.save(carOffer);
-        return carOfferDtoToEntityMapper.carEntityToDto(carOffer);
+    public CarOfferResponse update(Integer id,UserPrincipal userPrincipal, UpdateCarOfferRequest updateCarOfferRequest) {
+        CarOffer carOffer = carOfferRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car offer with id:" + id + " not found."));
+
+            carOffer.setBrandName(updateCarOfferRequest.getBrandName());
+            carOffer.setCityName(updateCarOfferRequest.getCityName());
+            carOffer.setDescription(updateCarOfferRequest.getDescription());
+            carOffer.setSellerFullName(userPrincipal.getUsername());
+            carOffer.setFuelType(updateCarOfferRequest.getFuelType());
+            carOffer.setGearBoxType(updateCarOfferRequest.getGearBoxType());
+            carOffer.setYear(updateCarOfferRequest.getYear());
+            carOffer.setMileage(updateCarOfferRequest.getMileage());
+            carOffer.setPrice(updateCarOfferRequest.getPrice());
+            carOffer.setModelName(updateCarOfferRequest.getModelName());
+            validation(carOffer);
+            carOfferRepository.save(carOffer);
+            return carOfferDtoToEntityMapper.carEntityToDto(carOffer);
+    }
+
+
+    private void validation(CarOffer carOffer)throws EntityNotFoundException {
+        brandRepository.findByName(carOffer.getBrandName())
+                .orElseThrow(() -> new EntityNotFoundException("Brand with name:" + carOffer.getBrandName() + " not found."));
+        fuelRepository.findByType(carOffer.getFuelType())
+                .orElseThrow(() -> new EntityNotFoundException("Fuel type:" + carOffer.getFuelType() + " not found."));
+        gearBoxRepository.findByType(carOffer.getGearBoxType())
+                .orElseThrow(() -> new EntityNotFoundException("Gear box type:" + carOffer.getGearBoxType() + " not found."));
+        modelRepository.findByName(carOffer.getModelName())
+                .orElseThrow(() -> new EntityNotFoundException("Model with name:" + carOffer.getModelName() + " not found."));
+
     }
 }

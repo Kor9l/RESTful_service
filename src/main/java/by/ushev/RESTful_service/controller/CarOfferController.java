@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/carOffer")
 public class CarOfferController {
 
-    @GetMapping("/viewCarOffer/{id}")
+    @GetMapping("/viewCarOffer")
     public ModelAndView carOfferView(Model model) {
         return new ModelAndView("carOfferView");
     }

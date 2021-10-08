@@ -1,7 +1,9 @@
 package by.ushev.RESTful_service.controller;
 
+import by.ushev.RESTful_service.domain.CarOffer;
 import by.ushev.RESTful_service.dto.request.CreateCarOfferRequest;
 import by.ushev.RESTful_service.dto.request.SearchCarOfferRequest;
+import by.ushev.RESTful_service.dto.request.UpdateCarOfferRequest;
 import by.ushev.RESTful_service.dto.response.CarOfferResponse;
 import by.ushev.RESTful_service.dto.response.MessageResponse;
 import by.ushev.RESTful_service.security.UserPrincipal;
@@ -36,18 +38,25 @@ public class CarOfferRestController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CarOfferResponse>> search(@PageableDefault(sort = {"id"},direction = Sort.Direction.ASC)
+    public ResponseEntity<Page<CarOffer>> search(@PageableDefault(sort = {"id"},direction = Sort.Direction.ASC)
                                                          Pageable pageable,
-                                                         @AuthenticationPrincipal UserPrincipal user,
-                                                         SearchCarOfferRequest searchCarOfferRequest) {
+                                                 @AuthenticationPrincipal UserPrincipal user,
+                                                 SearchCarOfferRequest searchCarOfferRequest) {
         return new ResponseEntity<>(carOfferService.search(user, searchCarOfferRequest, pageable), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<MessageResponse> add(@AuthenticationPrincipal UserPrincipal user,
                                                 @RequestBody CreateCarOfferRequest createCarOfferRequest){
+
         carOfferService.create(user,createCarOfferRequest);
         return new ResponseEntity<>(new MessageResponse("Created successfully"), HttpStatus.CREATED);
+    }
+
+    @PutMapping({"/{id}"})
+    public ResponseEntity<CarOfferResponse> update(@PathVariable Integer id, @AuthenticationPrincipal UserPrincipal user,@RequestBody UpdateCarOfferRequest updateCarOfferRequest){
+
+        return new ResponseEntity<>(carOfferService.update( id,user, updateCarOfferRequest),HttpStatus.OK);
     }
 
 }

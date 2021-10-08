@@ -1,6 +1,4 @@
 var carOfferApi = Vue.resource('/api/carOffer{/id}');
-var carOfferId = window.createCarOffer_js_carOfferId || "1";
-
 
 Vue.component('car-offer-form', {
     props: ['carOffers'],
@@ -21,23 +19,22 @@ Vue.component('car-offer-form', {
     },
     template:
         '<div>' +
-        '<div><input type="text" v-model="brandName" placeholder ={{ carOffer.brandName }} /></div>' +
-        '<div><input type="text" v-model="modelName" placeholder ={{ carOffer.modelName }} /></div>' +
-        '<div><input type="text" v-model="gearBoxType" placeholder ={{ carOffer.gearBoxType }} /></div>' +
-        '<div><input type="text" v-model="fuelType" placeholder ={{ carOffer.fuelType }} /></div>' +
-        '<div><input type="text" v-model="cityName" placeholder ={{ carOffer.cityName }} /></div>' +
-        '<div><input type="text" v-model="description" placeholder ={{ carOffer.description }} /></div>' +
-        '<div><input type="text" v-model="year" placeholder ={{ carOffer.year }} /></div>' +
-        '<div><input type="text" v-model="mileage" placeholder ={{ carOffer.mileage }} /></div>' +
-        '<div><input type="text" v-model="price" placeholder ={{ carOffer.price }} /></div>' +
+        '<div><input type="text" v-model="brandName" placeholder ="Enter Brand" /></div>' +
+        '<div><input type="text" v-model="modelName" placeholder ="Enter Model" /></div>' +
+        '<div><input type="text" v-model="gearBoxType" placeholder ="Enter gear box type" /></div>' +
+        '<div><input type="text" v-model="fuelType" placeholder ="Enter fuel type" /></div>' +
+        '<div><input type="text" v-model="cityName" placeholder ="Enter your city" /></div>' +
+        '<div><input type="text" v-model="description" placeholder ="Write description" /></div>' +
+        '<div><input type="text" v-model="year" placeholder ="Enter year" /></div>' +
+        '<div><input type="text" v-model="mileage" placeholder ="Enter mileage" /></div>' +
+        '<div><input type="text" v-model="price" placeholder ="Enter price" /></div>' +
         '<div><input type="button" value="Save" v-on:click="save" /></div>' +
         '</div>',
     created: function () {
-        carOfferApi.get(1).then(result =>
-            result.json().then(data =>
-                data.forEach(carOffer => this.carOffers.push(carOffer))
+        carOfferApi.get().then(result =>
+            console.log(result)
             )
-            )
+
     },
     methods: {
         save: function () {
