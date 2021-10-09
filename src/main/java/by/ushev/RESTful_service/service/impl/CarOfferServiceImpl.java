@@ -62,12 +62,30 @@ public class CarOfferServiceImpl implements CarOfferService {
     }
 
     @Override
-    public Page<CarOffer> search(UserPrincipal user, SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
+    public Page<CarOffer> search(UserPrincipal user,String brand,String model, SearchCarOfferRequest searchCarOfferRequest, Pageable pageable) {
         if (user.getRole().equals(Role.ROLE_ADMIN)){
-            return carOfferRepository.findAll(pageable);
+            if (brand.isEmpty()&&model.isEmpty()){
+                return carOfferRepository.findAll (pageable);
+            }
+            else if (!brand.isEmpty()&&model.isEmpty()){
+                return carOfferRepository.findAllByBrandName (brand,pageable);
+            }
+            else if (brand.isEmpty()&&!model.isEmpty()){
+                return carOfferRepository.findAllByModelName (model,pageable);
+            }
+            return carOfferRepository.findCarOfferByBrandNameAndModelName(brand,model,pageable);
         }
         else {
-            return carOfferRepository.findByDeleteFalse(pageable);
+            if (brand.isEmpty()&&model.isEmpty()){
+                return carOfferRepository.findAllByDeleteFalse(pageable);
+            }
+            else if (!brand.isEmpty()&&model.isEmpty()){
+                return carOfferRepository.findAllByBrandNameAndDeleteFalse(brand,pageable);
+            }
+            else if (brand.isEmpty()&&!model.isEmpty()){
+                return carOfferRepository.findAllByModelNameAndDeleteFalse(model,pageable);
+            }
+            return carOfferRepository.findCarOfferByBrandNameAndModelNameAndDeleteFalse (brand,model,pageable);
         }
 
 

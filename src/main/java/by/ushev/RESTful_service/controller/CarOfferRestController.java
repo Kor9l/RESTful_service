@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/carOffer")
@@ -41,8 +43,10 @@ public class CarOfferRestController {
     public ResponseEntity<Page<CarOffer>> search(@PageableDefault(sort = {"id"},direction = Sort.Direction.ASC)
                                                          Pageable pageable,
                                                  @AuthenticationPrincipal UserPrincipal user,
-                                                 SearchCarOfferRequest searchCarOfferRequest) {
-        return new ResponseEntity<>(carOfferService.search(user, searchCarOfferRequest, pageable), HttpStatus.OK);
+                                                 SearchCarOfferRequest searchCarOfferRequest,
+                                                 @RequestParam Optional<String> brand,
+                                                 @RequestParam Optional<String> model) {
+        return new ResponseEntity<>(carOfferService.search(user,brand.orElse(""), model.orElse(""),  searchCarOfferRequest, pageable), HttpStatus.OK);
     }
 
     @PostMapping
@@ -54,9 +58,10 @@ public class CarOfferRestController {
     }
 
     @PutMapping({"/{id}"})
-    public ResponseEntity<CarOfferResponse> update(@PathVariable Integer id, @AuthenticationPrincipal UserPrincipal user,@RequestBody UpdateCarOfferRequest updateCarOfferRequest){
+    public ResponseEntity<CarOfferResponse> update(@PathVariable Integer id, @AuthenticationPrincipal UserPrincipal user,
+                                                   @RequestBody UpdateCarOfferRequest updateCarOfferRequest){
 
-        return new ResponseEntity<>(carOfferService.update( id,user, updateCarOfferRequest),HttpStatus.OK);
+        return new ResponseEntity<>(carOfferService.update( id,user,updateCarOfferRequest),HttpStatus.OK);
     }
 
 }

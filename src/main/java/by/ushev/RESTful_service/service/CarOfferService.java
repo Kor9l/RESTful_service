@@ -17,7 +17,7 @@ public interface CarOfferService {
     CarOfferResponse getById(Integer id);
     void deleteById(Integer id);
     void create(UserPrincipal userPrincipal, CreateCarOfferRequest createCarOfferRequest);
-    Page<CarOffer> search(UserPrincipal user, SearchCarOfferRequest searchCarOfferRequest, Pageable pageable);
-    CarOfferResponse update( Integer id, UserPrincipal userPrincipal, UpdateCarOfferRequest updateCarOfferRequest);
+    Page<CarOffer> search(UserPrincipal user,String brand,String model,  SearchCarOfferRequest searchCarOfferRequest, Pageable pageable);
+    CarOfferResponse update( Integer id, UserPrincipal userPrincipal,UpdateCarOfferRequest updateCarOfferRequest);
 
 }
