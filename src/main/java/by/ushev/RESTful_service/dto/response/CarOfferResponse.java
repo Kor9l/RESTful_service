@@ -28,4 +28,6 @@ public class CarOfferResponse {
     private Integer mileage;
 
     private Float price;
+
+
 }

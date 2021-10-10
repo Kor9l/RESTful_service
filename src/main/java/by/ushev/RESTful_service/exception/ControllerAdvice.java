@@ -1,4 +1,4 @@
-package by.ushev.RESTful_service.excepion;
+package by.ushev.RESTful_service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

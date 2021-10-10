@@ -28,40 +28,40 @@ public class CarOfferRestController {
     private final CarOfferService carOfferService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CarOfferResponse> findById(@PathVariable Integer id){
+    public ResponseEntity<CarOfferResponse> findById(@PathVariable Integer id) {
         CarOfferResponse carOfferResponse = carOfferService.getById(id);
         return new ResponseEntity<>(carOfferResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> deleteById(@PathVariable Integer id){
+    public ResponseEntity<MessageResponse> deleteById(@PathVariable Integer id) {
         carOfferService.deleteById(id);
         return new ResponseEntity<>(new MessageResponse("Delete successfully"), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Page<CarOffer>> search(@PageableDefault(sort = {"id"},direction = Sort.Direction.ASC)
+    public ResponseEntity<Page<CarOffer>> search(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC)
                                                          Pageable pageable,
                                                  @AuthenticationPrincipal UserPrincipal user,
                                                  SearchCarOfferRequest searchCarOfferRequest,
                                                  @RequestParam Optional<String> brand,
                                                  @RequestParam Optional<String> model) {
-        return new ResponseEntity<>(carOfferService.search(user,brand.orElse(""), model.orElse(""),  searchCarOfferRequest, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(carOfferService.search(user, brand.orElse(""), model.orElse(""), searchCarOfferRequest, pageable), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<MessageResponse> add(@AuthenticationPrincipal UserPrincipal user,
-                                                @RequestBody CreateCarOfferRequest createCarOfferRequest){
+                                               @RequestBody CreateCarOfferRequest createCarOfferRequest) {
 
-        carOfferService.create(user,createCarOfferRequest);
+        carOfferService.create(user, createCarOfferRequest);
         return new ResponseEntity<>(new MessageResponse("Created successfully"), HttpStatus.CREATED);
     }
 
     @PutMapping({"/{id}"})
     public ResponseEntity<CarOfferResponse> update(@PathVariable Integer id, @AuthenticationPrincipal UserPrincipal user,
-                                                   @RequestBody UpdateCarOfferRequest updateCarOfferRequest){
+                                                   @RequestBody UpdateCarOfferRequest updateCarOfferRequest) {
 
-        return new ResponseEntity<>(carOfferService.update( id,user,updateCarOfferRequest),HttpStatus.OK);
+        return new ResponseEntity<>(carOfferService.update(id, user, updateCarOfferRequest), HttpStatus.OK);
     }
 
 }

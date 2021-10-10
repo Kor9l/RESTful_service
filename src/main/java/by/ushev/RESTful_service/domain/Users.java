@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -32,6 +31,4 @@ public class Users {
     @Builder.Default
     private Role role = Role.ROLE_USER;
 
-/*    @OneToMany(mappedBy = "users")
-    private Set<CarOffer> CarOffers;*/
 }

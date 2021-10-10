@@ -1,13 +1,12 @@
 package by.ushev.RESTful_service.repository;
 
-import by.ushev.RESTful_service.domain.Brand;
+import by.ushev.RESTful_service.domain.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface BrandRepository extends JpaRepository<Brand, Integer> {
-
-    Optional<Brand> findByName(String brand);
+public interface CityRepository extends JpaRepository<City, String> {
+    Optional<City> findByName(String city);
 }

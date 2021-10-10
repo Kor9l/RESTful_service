@@ -11,87 +11,55 @@ var carOfferApi = Vue.resource('/api/carOffer{/id}');
 
 Vue.component('car-view', {
         props: ['carOfferView'],
-        data: function () {
-            return {
-                brandName: '',
-                modelName: '',
-                gearBoxType: '',
-                fuelType: '',
-                cityName: '',
-                description: '',
-                year: '',
-                mileage: '',
-                price: '',
-                id: '',
-                seller: ''
-
-            }
-        },
-
         template:
             '<div>' +
             '<table>' +
             '<tr>' +
             '<td> Car offer ID  </td>' +
-            '<td> {{ id }} </td>' +
+            '<td> {{ this.carOfferView.id }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Brand  </td>' +
-            '<td> {{ brandName }} </td>' +
+            '<td> {{ this.carOfferView.brandName }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Model  </td>' +
-            '<td> {{ modelName }} </td>' +
+            '<td> {{ this.carOfferView.modelName }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Gear box type  </td>' +
-            '<td> {{ gearBoxType }} </td>' +
+            '<td> {{ this.carOfferView.gearBoxType }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Fuel type  </td>' +
-            '<td> {{ fuelType }} </td>' +
+            '<td> {{ this.carOfferView.fuelType }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> City  </td>' +
-            '<td> {{ cityName }} </td>' +
+            '<td> {{ this.carOfferView.cityName }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Description </td>' +
-            '<td> {{ description }} </td>' +
+            '<td> {{ this.carOfferView.description }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Year  </td>' +
-            '<td> {{ year }} </td>' +
+            '<td> {{ this.carOfferView.year }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Mileage  </td>' +
-            '<td> {{ mileage }} </td>' +
+            '<td> {{ this.carOfferView.mileage }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Price  </td>' +
-            '<td> {{ price }} </td>' +
+            '<td> {{ this.carOfferView.price }} </td>' +
             '</tr>' +
             '<tr>' +
             '<td> Seller  </td>' +
-            '<td> {{ seller }} </td>' +
+            '<td> {{ this.carOfferView.sellerFullName }} </td>' +
             '</tr>' +
             '</table>' +
             '</div>',
-
-        created: function () {
-            this.brandName = this.carOfferView.brandName
-            this.id = this.carOfferView.id
-            this.modelName = this.carOfferView.modelName
-            this.fuelType = this.carOfferView.fuelType
-            this.cityName = this.carOfferView.cityName
-            this.description = this.carOfferView.description
-            this.year = this.carOfferView.year
-            this.mileage = this.carOfferView.mileage
-            this.price = this.carOfferView.price
-            this.gearBoxType = this.carOfferView.gearBoxType
-            this.seller = this.carOfferView.sellerFullName
-        },
-
     }
 )
 
@@ -126,7 +94,7 @@ Vue.component('car-offer-form', {
         '<div><input type="text" v-model="mileage" placeholder ="Enter mileage" /></div>' +
         '<div><input type="text" v-model="price" placeholder ="Enter price" /></div>' +
         '<div><input type="button" value="Save" @click="save" /></div>' +
-        '<br>'+
+        '<br>' +
         '<span>Error message: {{ errorMessage }} </span>' +
         '</div>',
     created: function () {
@@ -173,7 +141,7 @@ Vue.component('car-offer-form', {
                     this.price = ''
                     this.carOfferAttr.id = 0
                     this.backToMain()
-                },response =>{
+                }, response => {
                     this.errorMessage = response.body.errors[0].message
                 })
             } else {
@@ -188,9 +156,8 @@ Vue.component('car-offer-form', {
                     this.year = ''
                     this.mileage = ''
                     this.price = ''
-                    this.carOfferAttr.id = 0
                     this.backToMain()
-                },response =>{
+                }, response => {
                     this.errorMessage = response.body.errors[0].message
                 })
 
@@ -260,39 +227,39 @@ Vue.component('car-offer-list', {
     template:
         '<div>' +
         '<div  v-if="updatePageV" >' +
-            '<car-offer-form :carOffers="carOffers" :carOfferAttr="carOffer" ' +
-            ':backToMain="backToMain"/>' +
+        '<car-offer-form :carOffers="carOffers" :carOfferAttr="carOffer" ' +
+        ':backToMain="backToMain"/>' +
         '</div>' +
 
         '<div v-if="mainPageV">' +
-            '<input type="button" value="New offer" @click="goToEdit" /><br><br>' +
-            '<span>Filters: </span><br>' +
-            '<div>' +
-            '<select type="select" v-model="brandName"><option disabled value="">Please select one</option>' +
-            '<option>Audi</option><option>Renault</option><option>BMW</option><option>Mersedes</option><option>Peguet</option>' +
-            '<option>WV</option><option>Citroen</option></select>' +
-            '<select type="select" v-model="modelName"><option disabled value="">Please select one</option>' +
-            '<option>TT</option><option>Logan</option><option>740</option><option>Crafter</option><option>Berlingo</option>' +
-            '<option>Partner</option></select><br>' +
-            '<span>Sort: </span><br>' +
-            '<select type="select" v-model="sort"><option disabled value="">Please select one</option>' +
-            '<option>id,ASC</option><option>id,DESC</option><option>brandName,ASC</option><option>brandName,DESC</option>'+
-            '<option>modelName,ASC</option> <option>modelName,DESC</option></select><br>' +
-            '<input type="button" value="Search" @click="refreshPage" />' +
-            '</div>' +
-            '<br>' +
-            '<input v-if="previousPageAvailable"  type="button" value="Previous page" @click="previousPage" />' +
-            '<input v-if="nextPageAvailable" type="button" value="Next page" @click="nextPage" />' +
-            '<car-offer-row   v-for="carOffer in carOffers" v-bind:key="carOffer.id" :carOffer="carOffer"' +
-            ':carOffers="carOffers" :editMethod="editMethod" :goToEdit="goToEdit" :refreshPage="refreshPage"' +
-            ' :goToView="goToView"/>'+
-            '<span>Curren page number: {{ currentPage }} </span>' +
-            '<span>Total pages: {{ totalPages }} </span>' +
+        '<input type="button" value="New offer" @click="goToEdit" /><br><br>' +
+        '<span>Filters: </span><br>' +
+        '<div>' +
+        '<select type="select" v-model="brandName"><option disabled value="">Please select one</option>' +
+        '<option>Audi</option><option>Renault</option><option>BMW</option><option>Mersedes</option><option>Peguet</option>' +
+        '<option>WV</option><option>Citroen</option></select>' +
+        '<select type="select" v-model="modelName"><option disabled value="">Please select one</option>' +
+        '<option>TT</option><option>Logan</option><option>740</option><option>Crafter</option><option>Berlingo</option>' +
+        '<option>Partner</option></select><br>' +
+        '<span>Sort: </span><br>' +
+        '<select type="select" v-model="sort"><option disabled value="">Please select one</option>' +
+        '<option>id,ASC</option><option>id,DESC</option><option>brandName,ASC</option><option>brandName,DESC</option>' +
+        '<option>modelName,ASC</option> <option>modelName,DESC</option></select><br>' +
+        '<input type="button" value="Search" @click="refreshPage" />' +
+        '</div>' +
+        '<br>' +
+        '<input v-if="previousPageAvailable"  type="button" value="Previous page" @click="previousPage" />' +
+        '<input v-if="nextPageAvailable" type="button" value="Next page" @click="nextPage" />' +
+        '<car-offer-row   v-for="carOffer in carOffers" v-bind:key="carOffer.id" :carOffer="carOffer"' +
+        ':carOffers="carOffers" :editMethod="editMethod" :goToEdit="goToEdit" :refreshPage="refreshPage"' +
+        ' :goToView="goToView"/>' +
+        '<span>Curren page number: {{ currentPage }} </span>' +
+        '<span>Total pages: {{ totalPages }} </span>' +
         '</div>' +
 
         '<div v-if="viewPageV" >' +
-            '<car-view :carOfferView="carOffer" />' +
-            '<input type="button" value="Back" @click="backToMain">' +
+        '<car-view :carOfferView="carOffer" />' +
+        '<input type="button" value="Back" @click="backToMain">' +
         '</div>' +
         '</div>',
     created: function () {
